@@ -1,5 +1,6 @@
 .DS_Store
 .kube/kubeconfig.yaml
+.kube/content-storage.code-workspace
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

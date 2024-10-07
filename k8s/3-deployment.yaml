@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: content-storage
+spec:
+  template:
+    metadata:
+      labels:
+        app: web
+
+    spec:
+      containers:
+      - name: my-container
+        image: sahilkp/content-storgae:latest
+        env:
+          -name: PORT
+          value: "8080"
+          -name: WELCOME_MSG
+          valueFrom:
+            name: content-engine-configmap
+            key: WELCOME_MSG
+          
+        ports:
+            -containerPort: 8080
