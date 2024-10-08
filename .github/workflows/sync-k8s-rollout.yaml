@@ -1,6 +1,11 @@
 name: Sync K8s Rollout
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'k8s/**'
+      - .github\workflows\sync-k8s-rollout.yaml
   workflow_dispatch:
 
 jobs:
