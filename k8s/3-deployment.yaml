@@ -3,6 +3,10 @@ kind: Deployment
 metadata: 
   name: content-storage
 spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
   template:
     metadata:
       labels:
@@ -13,10 +17,12 @@ spec:
       - name: my-container
         image: sahilkp/content-storgae:latest
         env:
-          -name: PORT
-          value: "8080"
-          -name: WELCOME_MSG
-          valueFrom:
+          - name: PORT
+            value: "8080"
+          - name: VERSION
+            value: "1.0.2"
+          - name: WELCOME_MSG
+            valueFrom:
             name: content-engine-configmap
             key: WELCOME_MSG
           
