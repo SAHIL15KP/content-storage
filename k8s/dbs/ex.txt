@@ -1,0 +1,3 @@
+in this folder of dbs there has to be three files || commands.md , postgres.yaml, secret.yaml
+
+this three files contains your configuration for , connecting your project to your kubernetes cluster database and how your database will work .
