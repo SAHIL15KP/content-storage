@@ -1,0 +1,49 @@
+name: Sync K8s Rollout
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'k8s/**'
+      - .github/workflows/sync-k8s-rollout.yaml
+  workflow_dispatch:
+    
+
+jobs:
+  k8s_apply:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME || 'content-engine' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Configure Kubectl
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+      - name: Configure Deployment Secrets
+        run: |
+          mkdir -p k8s/
+          cat <<EOF > k8s/1-secret.yaml
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: content-engine-secret
+          stringData:
+            DJANGO_DEBUG: "1"
+            DATABASE_URL: "${{ secrets.DATABASE_URL }}"
+            DJANGO_SECRET_KEY: "${{ secrets.DJANGO_SECRET_KEY }}"
+            AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
+            AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+            AWS_BUCKET_NAME: "${{ secrets.AWS_BUCKET_NAME }}"
+          EOF
+      - name: Apply K8s Manifests
+        run: |
+          kubectl apply -f k8s/
+      - name: Trigger K8s Deployment Rollout
+        run: |
+          kubectl rollout restart deployments/${{ env.DEPLOYMENT_NAME }}
+      - name: Verify K8s Deployment Rollout
+        run: |
+          kubectl rollout status deployments/${{ env.DEPLOYMENT_NAME }}

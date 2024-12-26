@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="flex space-x-4">
+    <div class="grow">
+        {% include 'items/snippets/upload.html' with instance=instance %}
+    </div>
+</div>
+{% endblock content %}

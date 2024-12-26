@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="flex space-x-4">
+    <div class="grow space-y-4">
+        <div
+            class="" 
+            hx-get="{{ instance.get_upload_url }}" 
+            hx-trigger="load"></div>
+
+        <div
+            class="max-h-[80vh] overflow-y-auto" 
+            hx-get="{{ instance.get_files_url }}" 
+            hx-trigger="load"></div>
+    </div>
+    <div>
+        <h1 class="text-4xl font-extrabold dark:text-white">{{ instance.title }}</h1>
+        {% if instance.description %}
+        <div class="my-4 text-lg text-gray-500">{{ instance.description|linebreaks }}</div>
+        {% endif %}
+
+       
+
+
+        {% include 'items/snippets/form.html' with form=form btn_label="Save" %}
+    </div>
+</div>
+{% endblock content %}

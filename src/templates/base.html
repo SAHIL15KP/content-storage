@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}CFE Home{% endblock %}</title>
+    {% include 'head/css.html' %}
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <div>
+        {% include 'navbar/base.html' %}
+        <div class="max-w-screen-xl mx-auto p-4">
+            {% include 'head/messages.html' %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js" defer></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
+    <script>
+         document.body.addEventListener('htmx:xhr:loadstart', function () {
+            document.body.classList.add('htmx-request');
+        });
+
+        document.body.addEventListener('htmx:xhr:loadend', function () {
+            document.body.classList.remove('htmx-request');
+        });
+    </script>
+</body>
+</html>
