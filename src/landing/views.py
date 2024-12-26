@@ -1,5 +1,5 @@
 from django.shortcuts import render
-<<<<<<< HEAD
+
 from items.models import Item
 # Create your views here.
 from projects.decorators import project_required
@@ -20,9 +20,7 @@ def about_page_view(request):
 def server_error_page(request):
     raise Exception
     return render(request, "landing/error.html", {})
-=======
 
 # Create your views here.
 def hello(request):
     return render(request , "home.html")
->>>>>>> 7aaa06d17b82687db3714004d4251da1285ce34f
