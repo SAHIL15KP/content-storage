@@ -1,13 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
+<<<<<<< HEAD
 metadata:
   name: content-engine
 spec:
   replicas: 10
+=======
+metadata: 
+  name: content-storage
+spec:
+  replicas: 3
+>>>>>>> 7aaa06d17b82687db3714004d4251da1285ce34f
   selector:
     matchLabels:
       app: web
   template:
+<<<<<<< HEAD
     # name: content-engine-pod
     metadata:
       labels:
@@ -35,3 +43,25 @@ spec:
                 name: content-engine-secret
           ports:
             - containerPort: 8080
+=======
+    metadata:
+      labels:
+        app: web
+
+    spec:
+      containers:
+      - name: my-container
+        image: sahilkp/content-storgae:latest
+        env:
+          - name: PORT
+            value: "8080"
+          - name: VERSION
+            value: "1.0.2"
+          - name: WELCOME_MSG
+            valueFrom:
+            name: content-engine-configmap
+            key: WELCOME_MSG
+          
+        ports:
+            -containerPort: 8080
+>>>>>>> 7aaa06d17b82687db3714004d4251da1285ce34f
