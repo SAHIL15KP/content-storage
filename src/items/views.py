@@ -24,10 +24,21 @@ AWS_SECRET_ACCESS_KEY=config("AWS_SECRET_ACCESS_KEY", default=None)
 AWS_BUCKET_NAME=config("AWS_BUCKET_NAME", default=None)
 
 
+# def filename_to_s3_filename(fname):
+#     if fname is None:
+#         return None
+#     if fname == '':
+#         return None
+#     stem = pathlib.Path(fname).stem
+#     suffix = pathlib.Path(fname).suffix
+#     stem_clean = slugify(stem).replace('-', '_')
+#     return f'{stem_clean}{suffix}'
+
+
+
+
 def filename_to_s3_filename(fname):
-    if fname is None:
-        return None
-    if fname == '':
+    if fname is None or '':
         return None
     stem = pathlib.Path(fname).stem
     suffix = pathlib.Path(fname).suffix
