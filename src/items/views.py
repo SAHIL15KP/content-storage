@@ -11,7 +11,7 @@ from projects import cache as projects_cache
 from projects.decorators import project_required
 from django.utils.text import slugify
 
-from django_htmx.http import HttpResponseClientRedirect
+from django.http import HttpResponseRedirect
 
 from cfehome import http
 
@@ -88,7 +88,7 @@ def item_file_delete_view(request, id=None, name=None):
         return redirect(detail_url)
     if request.method != "POST":
         detail_url = instance.get_absolute_url()
-        return HttpResponseClientRedirect(detail_url)
+        return HttpResponseRedirect(detail_url)
     # modal for a confirm file name
     prefix = instance.get_prefix()
     client = s3.S3Client(
