@@ -24,7 +24,7 @@ def get_project_or_404(request, handle=None, skip_404=False):
 def project_list_view(request):
     object_list = Project.objects.has_access(request.user)
     return render(request, "projects/list.html", {'object_list': object_list})
-
+    
 @login_required
 def project_detail_update_view(request, handle=None):
     instance = get_project_or_404(request, handle=handle)
