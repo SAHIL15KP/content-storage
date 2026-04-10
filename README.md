@@ -1,17 +1,26 @@
-# Content Storage
+# Content Storage Platform
 
-I built this project as a Django-based starting point for a content-focused product with user accounts, subscriptions, and a clean local development setup.
+**Content Storage** is a modern, full-stack SaaS platform designed specifically for content creators. Built for speed, security, and aesthetics, it provides a seamless experience for creators to securely upload, manage, and store their high-quality photos and videos directly from their personalized dashboard.
 
-This README is written for anyone who wants to run the project on their own computer. I kept the setup intentionally simple so you can get it working locally without being forced into extra services on day one. You can start with SQLite, add Stripe or email later if you need those flows.
+This repository serves as a fully functional proof-of-concept for a Content Management SaaS platform. 
+
+### Key Features
+- **Dynamic Content Gallery**: A premium, responsive grid dashboard capable of hosting native HTML5 video previews and high-res image galleries.
+- **Smart Upload Parsing**: Automatically tags and categorizes uploaded media files based on content type.
+- **Modern Glassmorphic UI**: Beautifully styled utilizing Tailwind CSS with deep, immersive background gradients, drop-blurs, and interactive micro-animations.
+- **Robust Authentication**: Powered by Django Allauth for secure email/password and social login flows.
+- **Tiered Subscriptions**: Pre-configured dynamic pricing models ready to be hooked into Stripe (Pro, Starter, Annual plans).
+- **Cloud-Ready Infrastructure**: Designed to seamlessly transition from local SQLite/storage to Neon Postgres DB and AWS S3 storage for production deployment via Docker/Railway.
+
+---
 
 ## What is inside
 
-- Django 5
+- Django 5 & Python 3.13
 - Tailwind CSS
 - Django Allauth for authentication
-- Stripe integration for subscription and checkout flows
-- WhiteNoise for static files
-- SQLite by default for local development, with optional `DATABASE_URL` support for Postgres
+- Stripe integration architecture for subscription flows
+- SQLite for local development (ready for Neon Postgres)
 
 ## What you need before you start
 
