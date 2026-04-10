@@ -5,6 +5,12 @@ I built this project as a Django-based starting point for a content-focused prod
 This README is written for anyone who wants to run the project on their own computer. I kept the setup intentionally simple so you can get it working locally without being forced into extra services on day one. You can start with SQLite, add Stripe or email later if you need those flows.
 
 ## What is inside
+<img width="1891" height="981" alt="Screenshot 2026-04-11 023122" src="https://github.com/user-attachments/assets/065e3c14-af43-470e-aff3-593bc58a6daf" />
+<img width="1911" height="988" alt="Screenshot 2026-04-11 023140" src="https://github.com/user-attachments/assets/5ae54da0-80bd-4b84-b649-04ff4ba58e5d" />
+<img width="1909" height="981" alt="Screenshot 2026-04-11 023944" src="https://github.com/user-attachments/assets/7197e314-b4d3-4186-8fd9-9cc8d0866c3f" />
+<img width="1919" height="994" alt="Screenshot 2026-04-11 023231" src="https://github.com/user-attachments/assets/8ca945a3-8805-4f58-be12-bedca143f792" />
+<img width="1889" height="997" alt="Screenshot 2026-04-11 023302" src="https://github.com/user-attachments/assets/143427dc-aca5-4bd8-ae65-61c135351ea3" />
+
 
 - Django 5
 - Tailwind CSS
