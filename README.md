@@ -1,85 +1,178 @@
+# Content Storage
 
+I built this project as a Django-based starting point for a content-focused product with user accounts, subscriptions, and a clean local development setup.
 
-## Getting Started
+This README is written for anyone who wants to run the project on their own computer. I kept the setup intentionally simple so you can get it working locally without being forced into extra services on day one. You can start with SQLite, add Stripe or email later if you need those flows.
 
-### 1. Copy the Build Container Workflow this Repository
+## What is inside
 
-Navigate to your Django project directory and copy the build container workflow from this repository.
+- Django 5
+- Tailwind CSS
+- Django Allauth for authentication
+- Stripe integration for subscription and checkout flows
+- WhiteNoise for static files
+- SQLite by default for local development, with optional `DATABASE_URL` support for Postgres
+
+## What you need before you start
+
+- Git
+- Python 3.11 or newer
+- `pip`
+- Node.js and `npm` if you want to rebuild frontend assets locally
+
+## Clone the project
 
 ```bash
-mkdir -p .github/workflows
-curl https://raw.githubusercontent.com/codingforentrepreneurs/django-auto-container/main/.github/workflows/build-container.yaml > .github/workflows/build-container.yaml
+git clone https://github.com/SAHIL15KP/content-storage.git
+cd content-storage
 ```
 
-### 2. Github Actions Secrets
-In your GitHub Repo, add the following Secrets:
-#### Required Secrets:
-If you do not include these secrets, the container will be built but not hosted anywhere.
+## Create a virtual environment
 
-- `DOCKER_HUB_USERNAME`: Your Docker Hub username.
-- `DOCKER_HUB_TOKEN`: Your Docker Hub access token; create a new token [here](https://hub.docker.com/settings/security).
+### macOS/Linux
 
-
-#### Recommended Secrets:
-
-These secrets are highly recommended to add for your specific project.
-- `DOCKER_HUB_REPO`: The Docker repository to push to, in the format `username/repository`. Defaults to the format of your GitHub repo if not set -- this is where you will store your container.
-- `BASE_DIR`: The default Django project location is `src/` as you see in this repo. If you have a different location, you can set it here.
-
-#### Optional Secrets:
-If you need more advanced usage, consider adding these secrets to modify how your project works.
-- `BUILDPACK_BUILDER`: The buildpack builder to use. Defaults to 'heroku/buildpacks:22' if not set. Review various Heroku buildpacks [here](https://devcenter.heroku.com/articles/stack#stack-support-details)
-- `DOCKER_HUB_IMAGE_TAG`: The tag to use for the Docker image. Defaults to the commit SHA (recommended) or you can set this value yourself.
-
-### 3. Required Files
-
-In my `BASE_DIR` (defaults to `src/`), I have the following files:
-- project.toml
-- requirements.txt
-
-This files are needed to ensure the auto-container workflow runs correctly, review `src/` for working examples or use the following samples:
-
-`project.toml`
-```toml
-[[build.env]]
-name = "DISABLE_COLLECTSTATIC"
-value = "1"
-
-[[build.env]]
-name =  "GOOGLE_RUNTIME_VERSION"
-value = "3.11.7"
-
-[[build.env]]
-name = "GOOGLE_ENTRYPOINT"
-value = "gunicorn cfehome.wsgi:application --bind \"0.0.0.0:$PORT\""
+```bash
+python3 -m venv venv
+source venv/bin/activate
 ```
-The `GOOGLE_ENTRYPOINT` is the command that will be run when the container is started. In this case, it's the production version of running `python manage.py runserver` but with `gunicorn` instead of `runserver`.
 
+### Windows PowerShell
 
-`requirements.txt`
+```powershell
+py -m venv venv
+.\venv\Scripts\Activate.ps1
 ```
-Django
-gunicorn
+
+## Install Python dependencies
+
+I recommend installing both the main and development requirements so you have the same tools I use locally.
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install -r requirements.dev.txt
 ```
-`gunicorn` is required as it's what is recommended to run Django in production.
 
-### 4. Push
+`requirements.dev.txt` currently installs `rav`, which is a small task runner used in this repo.
 
-Push your code to GitHub and watch the magic happen. You can view the workflow in the "Actions" tab of your GitHub repo.
+## Install frontend dependencies
 
-### 5. Run
+This step is only needed if you plan to rebuild or watch Tailwind assets. The app can still run locally without it because the repo already includes built static files.
 
-If you have Docker installed locally, you can run your application with:
-
+```bash
+npm install
 ```
-docker run -e PORT=8888 -p 8888:8888 <your-docker-hub-username>/<your-docker-hub-repo>:<your-docker-hub-image-tag>
+
+## Create your local environment file
+
+### macOS/Linux
+
+```bash
+cp .env.sample .env
 ```
-Open [http://localhost:8888](http://localhost:8888) to view your application.
 
-If you don't have Docker installed locally, you can run your application on any container host such as:
+### Windows PowerShell
 
-- Kubernetes
-- Knative
-- Hashicorp Nomad
-- Any managed container hosting service
->>>>>>> 7aaa06d17b82687db3714004d4251da1285ce34f
+```powershell
+Copy-Item .env.sample .env
+```
+
+At minimum, make sure these values are set in `.env`:
+
+- `DJANGO_DEBUG=1`
+- `DJANGO_SECRET_KEY="<your-secret-key>"`
+
+Useful notes:
+
+- Leave `DATABASE_URL` empty if you want to use the default local SQLite database.
+- Add the email settings only if you want to test email delivery and account verification flows.
+- Add `STRIPE_SECRET_KEY` only if you want to test billing or checkout features.
+
+## Generate a Django secret key
+
+Run this once, then paste the output into `DJANGO_SECRET_KEY` inside `.env`:
+
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+## Download vendor static files
+
+The UI uses a few vendor assets that should be pulled once before local development:
+
+```bash
+cd src
+python manage.py vendor_pull
+```
+
+## Run migrations
+
+Still inside `src`, run:
+
+```bash
+python manage.py migrate
+```
+
+If you did not set `DATABASE_URL`, Django will create and use a local SQLite database automatically.
+
+## Create an admin user
+
+```bash
+python manage.py createsuperuser
+```
+
+## Start the development server
+
+```bash
+python manage.py runserver
+```
+
+Open the app at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+
+## Optional frontend commands
+
+Run these from the project root, not from `src`.
+
+If you installed Node dependencies and want to work on styles locally:
+
+```bash
+npm run watch
+```
+
+To build the production CSS bundle:
+
+```bash
+npm run build
+```
+
+## Optional `rav` commands
+
+If you like using the task runner, these are the main commands available:
+
+- `rav run install`
+- `rav run install_dev`
+- `rav run migrate`
+- `rav run dev`
+- `rav run test`
+- `rav run vendors_pull`
+- `rav run collectstatic`
+
+Important note for Windows users: the current `rav.yaml` uses `venv/bin/...` paths, so the direct `python manage.py ...` commands in this README are the safest option unless you update those paths for Windows.
+
+## Local development notes
+
+- You do not need Postgres just to get started locally. SQLite works out of the box.
+- You do not need Stripe credentials unless you are actively testing checkout or subscription flows.
+- You do not need SMTP credentials unless you want to test email sending end to end.
+- This setup guide does not force any cloud storage or upload service. If you want to add your own image or video upload flow later, you can do that on top of the normal local Django setup.
+
+## Troubleshooting
+
+- If `python manage.py vendor_pull` fails, check your internet connection and try again.
+- If signup or email verification is not working, make sure your email settings in `.env` are valid.
+- If billing pages fail, confirm that `STRIPE_SECRET_KEY` is set correctly.
+- If `rav` commands do not work on Windows, use the direct commands from this README instead.
+
+## Docker
+
+If you prefer to run the project with Docker, the repo already includes a `Dockerfile`. You will still need a valid `.env` file before building and running the container.

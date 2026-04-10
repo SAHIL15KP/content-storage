@@ -1,13 +1,12 @@
-.DS_Store
-.kube/kubeconfig.yaml
-<<<<<<< HEAD
-k8s/*secret.yaml
-src/static-root/
-k8s/dbs/secret.yaml
+# ignore vendor static files
+src/staticfiles/vendors
 
-=======
-.kube/content-storage.code-workspace
->>>>>>> 7aaa06d17b82687db3714004d4251da1285ce34f
+# ignore local static file root
+# or "local cdn"
+local-cdn/
+
+.DS_Store
+venv/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -116,8 +115,10 @@ ipython_config.py
 #pdm.lock
 #   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
 #   in version control.
-#   https://pdm.fming.dev/#use-with-ide
+#   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
 .pdm.toml
+.pdm-python
+.pdm-build/
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
@@ -167,11 +168,8 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-<<<<<<< HEAD
 #.idea/
 
-.DS_Store
-local-cdn/
 
 # Logs
 logs
@@ -201,8 +199,7 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage 
-(https://gruntjs.com/creating-plugins#storing-task-files)
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
 # Bower dependency directory (https://bower.io/)
@@ -269,8 +266,7 @@ dist
 
 # Gatsby files
 .cache/
-# Comment in the public line in if your project uses Gatsby and not 
-Next.js
+# Comment in the public line in if your project uses Gatsby and not Next.js
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
 
@@ -305,6 +301,3 @@ Next.js
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-=======
-#.idea/
->>>>>>> 7aaa06d17b82687db3714004d4251da1285ce34f

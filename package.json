@@ -1,11 +1,10 @@
 {
   "scripts": {
-    "dev": "tailwindcss -i src/static/tw/tailwind-input.css -o src/static/css/cfehome-ui.css --watch"
+    "watch": "tailwindcss -i src/staticfiles/base_tailwind/tailwind-input.css -o src/staticfiles/vendors/tailwind-out.css --watch",
+    "build": "tailwindcss -i src/staticfiles/base_tailwind/tailwind-input.css -o src/staticfiles/theme/saas-theme.min.css --build --minify"
   },
   "devDependencies": {
-    "tailwindcss": "^3.2.4"
-  },
-  "dependencies": {
-    "flowbite": "^2.2.1"
+    "content-storage": "file:local-packages/content-storage",
+    "tailwindcss": "^3.4.4"
   }
 }

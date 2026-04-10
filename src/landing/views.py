@@ -1,26 +1,16 @@
+import helpers.numbers
 from django.shortcuts import render
 
-from items.models import Item
 # Create your views here.
-from projects.decorators import project_required
+from dashboard.views import dashboard_view
 
-@project_required
-def dashboard_view(request):
-    return render(request, "dashboard/home.html", {})
+from visits.models import PageVisit
 
-def home_page_view(request):
-    if not request.user.is_authenticated:
-        return render(request, "landing/home.html", {})
-    return dashboard_view(request)
-
-def about_page_view(request):
-    print(request.project)
-    return render(request, "landing/home.html", {})
-
-def server_error_page(request):
-    raise Exception
-    return render(request, "landing/error.html", {})
-
-# Create your views here.
-def hello(request):
-    return render(request , "home.html")
+def landing_dashboard_page_view(request):
+    if request.user.is_authenticated:
+        return dashboard_view(request)
+    qs = PageVisit.objects.all()
+    PageVisit.objects.create(path=request.path)
+    page_views_formatted = helpers.numbers.shorten_number(qs.count() * 100_000)
+    social_views_formatted = helpers.numbers.shorten_number(qs.count() * 23_000)
+    return render(request, "landing/main.html", {"page_view_count": page_views_formatted, "social_views_count": social_views_formatted})
