@@ -41,15 +41,15 @@ downloads:
       - name: saas-theme.min.css
         overwrite: false
         url: https://raw.githubusercontent.com/codingforentrepreneurs/SaaS-Foundations/main/src/staticfiles/theme/saas-theme.min.css
-      - name: content-storage.min.css
+      - name: flowbite.min.css
         overwrite: false
-        url: https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.5.2/content-storage.min.css 
-      - name: content-storage.min.js
+        url: https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.css
+      - name: flowbite.min.js
         overwrite: false
-        url: https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.5.2/content-storage.min.js
-      - name: content-storage.min.js.map
+        url: https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js
+      - name: flowbite.min.js.map
         overwrite: false
-        url: https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.5.2/content-storage.min.js.map
+        url: https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js.map
   staticfiles_dev:
     name: vendor
     destination: src/staticfiles/vendors
@@ -60,12 +60,12 @@ downloads:
       - name: saas-theme.min.css
         overwrite: false
         url: https://raw.githubusercontent.com/codingforentrepreneurs/SaaS-Foundations/main/src/staticfiles/theme/saas-theme.min.css
-      - name: content-storage.min.css
+      - name: flowbite.min.css
         overwrite: false
-        url: https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.5.2/content-storage.min.css 
-      - name: content-storage.min.js
+        url: https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.css
+      - name: flowbite.min.js
         overwrite: false
-        url: https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.5.2/content-storage.min.js
-      - name: content-storage.min.js.map
+        url: https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js
+      - name: flowbite.min.js.map
         overwrite: false
-        url: https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.5.2/content-storage.min.js.map
+        url: https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js.map
