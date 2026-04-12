@@ -9,9 +9,9 @@ STATICFILES_VENDOR_DIR = getattr(settings,'STATICFILES_VENDOR_DIR')
 
 VENDOR_STATICFILES = {
     "saas-theme.min.css": "https://raw.githubusercontent.com/codingforentrepreneurs/SaaS-Foundations/main/src/staticfiles/theme/saas-theme.min.css",
-    "content-storage.min.css": "https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.3.0/content-storage.min.css",
-    "content-storage.min.js": "https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.3.0/content-storage.min.js",
-    "content-storage.min.js.map": "https://cdnjs.cloudflare.com/ajax/libs/content-storage/2.3.0/content-storage.min.js.map"
+    "flowbite.min.css": "https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.css",
+    "flowbite.min.js": "https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js",
+    "flowbite.min.js.map": "https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js.map"
 }
 
 class Command(BaseCommand):

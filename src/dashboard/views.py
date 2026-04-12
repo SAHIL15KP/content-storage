@@ -7,7 +7,7 @@ from .forms import UserFileForm
 @login_required
 def dashboard_view(request):
     if request.method == 'POST':
-        form = UserFileForm(request.POST, request.FILES)
+        form = UserFileForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             user_file = form.save(commit=False)
             user_file.user = request.user
@@ -17,7 +17,7 @@ def dashboard_view(request):
         else:
             messages.error(request, "Error uploading file. Please check the form.")
     else:
-        form = UserFileForm()
+        form = UserFileForm(user=request.user)
 
     files = UserFile.objects.filter(user=request.user).order_by('-uploaded_at')
 
