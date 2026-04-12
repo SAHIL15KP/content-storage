@@ -7,13 +7,21 @@ class UserFile(models.Model):
     file = models.FileField(upload_to='user_uploads/')
     name = models.CharField(max_length=255, blank=True)
     content_type = models.CharField(max_length=100, blank=True, null=True)
+    size = models.BigIntegerField(default=0) # We added this!
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         if not self.name and self.file:
             self.name = os.path.basename(self.file.name)
+            
+        # Automatically save the file size
+        if self.file and not self.size:
+            try:
+                self.size = self.file.size
+            except Exception:
+                pass
+                
         if not self.content_type and self.file:
-            # Simple content type guesser
             ext = os.path.splitext(self.file.name)[1].lower()
             if ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp']:
                 self.content_type = 'image'

@@ -20,17 +20,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Configure Gmail for Django Emails: https://www.codingforentrepreneurs.com/blog/sending-email-in-django-from-gmail/
 
 # Email config
-EMAIL_BACKEND = config("EMAIL_BACKEND", cast=str, default="django.core.mail.backends.console.EmailBackend")
-EMAIL_HOST = config("EMAIL_HOST", cast=str, default="smtp.gmail.com")
-EMAIL_PORT = config("EMAIL_PORT", cast=str, default="587")  # Recommended
-EMAIL_HOST_USER = config("EMAIL_HOST_USER", cast=str, default=None)
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", cast=str, default=None)
-EMAIL_USE_TLS = config(
-    "EMAIL_USE_TLS", cast=bool, default=True
-)  # Use EMAIL_PORT 587 for TLS
-EMAIL_USE_SSL = config(
-    "EMAIL_USE_SSL", cast=bool, default=False
-)  # Use MAIL_PORT 465 for SSL
+# Use Resend HTTP API in production (Railway blocks SMTP ports)
+RESEND_API_KEY = config("RESEND_API_KEY", default=None)
+
+if RESEND_API_KEY:
+    EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+    ANYMAIL = {"RESEND_API_KEY": RESEND_API_KEY}
+    DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="onboarding@resend.dev")
+else:
+    EMAIL_BACKEND = config("EMAIL_BACKEND", cast=str, default="django.core.mail.backends.console.EmailBackend")
+    EMAIL_HOST = config("EMAIL_HOST", cast=str, default="smtp.gmail.com")
+    EMAIL_PORT = config("EMAIL_PORT", cast=int, default=587)
+    EMAIL_HOST_USER = config("EMAIL_HOST_USER", cast=str, default=None)
+    EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", cast=str, default=None)
+    EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=True)
+    EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=False)
 ADMIN_USER_NAME = config("ADMIN_USER_NAME", default="Admin user")
 ADMIN_USER_EMAIL = config("ADMIN_USER_EMAIL", default=None)
 
@@ -52,10 +56,16 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 DEBUG = config("DJANGO_DEBUG", cast=bool)
 BASE_URL = config("BASE_URL", default=None)
 ALLOWED_HOSTS = [
-    ".railway.app"  # https://saas.prod.railway.app
+    "*", ".railway.app", ".koyeb.app", ".onrender.com"
 ]
 if DEBUG:
     ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+    "https://*.koyeb.app",
+    "https://*.onrender.com",
+]
 
 
 # Application definition
@@ -68,6 +78,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     # my-apps
     "commando",
     "customers",
@@ -83,6 +94,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "widget_tweaks",
+    "anymail",
 ]
 
 MIDDLEWARE = [
@@ -110,12 +122,14 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "allauth.account.context_processors.account",
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = "cfehome.wsgi.application"
+SITE_ID = 1
 
 
 # Database
@@ -143,24 +157,6 @@ if DATABASE_URL and DATABASE_URL != "":
     }
 
 
-# Add these at the top of your settings.py
-# from os import getenv
-# from dotenv import load_dotenv
-
-# Replace the DATABASES section of your settings.py with this
-# DATABASES = {
-#   'default': {
-#     'ENGINE': 'django.db.backends.postgresql',
-#     'NAME': config('PGDATABASE'),
-#     'USER': config('PGUSER'),
-#     'PASSWORD': config('PGPASSWORD'),
-#     'HOST': config('PGHOST'),
-#     'PORT': config('PGPORT', 5432),
-#     'OPTIONS': {
-#       'sslmode': 'require',
-#     },
-#   }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -184,12 +180,9 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_LOGIN_METHODS = {"username", "email"}
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "[CFE] "
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "[content-storage] "
 ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 
-# deprecated in Allauth
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 
 AUTHENTICATION_BACKENDS = [
     # ...
@@ -234,14 +227,36 @@ STATIC_ROOT = BASE_DIR / "local-cdn"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# < Django 4.2
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+USE_S3 = config("USE_S3", cast=bool, default=False)
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+if USE_S3:
+    AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = True
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "location": "media"
+            }
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

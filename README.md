@@ -1,10 +1,11 @@
-# Content Storage Platform
+# Drawer
 
-**Content Storage** is a modern, full-stack SaaS platform designed specifically for content creators. Built for speed, security, and aesthetics, it provides a seamless experience for creators to securely upload, manage, and store their high-quality photos and videos directly from their personalized dashboard.
+**Drawer** is a modern, full-stack SaaS platform designed specifically for content creators. Built for speed, security, and aesthetics, it provides a seamless experience for creators to securely upload, manage, and store their high-quality photos and videos directly from their personalized dashboard.
 
 This repository serves as a fully functional proof-of-concept for a Content Management SaaS platform. 
 
-### Key Features
+## 🚀 Key Features
+
 - **Dynamic Content Gallery**: A premium, responsive grid dashboard capable of hosting native HTML5 video previews and high-res image galleries.
 - **Smart Upload Parsing**: Automatically tags and categorizes uploaded media files based on content type.
 - **Modern Glassmorphic UI**: Beautifully styled utilizing Tailwind CSS with deep, immersive background gradients, drop-blurs, and interactive micro-animations.
@@ -14,156 +15,131 @@ This repository serves as a fully functional proof-of-concept for a Content Mana
 
 ---
 
-## What is inside
-<img width="1891" height="981" alt="Screenshot 2026-04-11 023122" src="https://github.com/user-attachments/assets/065e3c14-af43-470e-aff3-593bc58a6daf" />
-<img width="1919" height="994" alt="Screenshot 2026-04-11 023231" src="https://github.com/user-attachments/assets/8ca945a3-8805-4f58-be12-bedca143f792" />
-<img width="1911" height="988" alt="Screenshot 2026-04-11 023140" src="https://github.com/user-attachments/assets/5ae54da0-80bd-4b84-b649-04ff4ba58e5d" />
-<img width="1909" height="981" alt="Screenshot 2026-04-11 023944" src="https://github.com/user-attachments/assets/7197e314-b4d3-4186-8fd9-9cc8d0866c3f" />
-<img width="1889" height="997" alt="Screenshot 2026-04-11 023302" src="https://github.com/user-attachments/assets/143427dc-aca5-4bd8-ae65-61c135351ea3" />
+## 📸 Screenshots
 
+<img width="1891" height="981" alt="Screenshot 1" src="https://github.com/user-attachments/assets/065e3c14-af43-470e-aff3-593bc58a6daf" />
+<img width="1911" height="988" alt="Screenshot 2" src="https://github.com/user-attachments/assets/5ae54da0-80bd-4b84-b649-04ff4ba58e5d" />
+<img width="1909" height="981" alt="Screenshot 3" src="https://github.com/user-attachments/assets/7197e314-b4d3-4186-8fd9-9cc8d0866c3f" />
+<img width="1919" height="994" alt="Screenshot 4" src="https://github.com/user-attachments/assets/8ca945a3-8805-4f58-be12-bedca143f792" />
+<img width="1889" height="997" alt="Screenshot 5" src="https://github.com/user-attachments/assets/143427dc-aca5-4bd8-ae65-61c135351ea3" />
 
-- Django 5 & Python 3.13
-- Tailwind CSS
-- Django Allauth for authentication
-- Stripe integration architecture for subscription flows
-- SQLite for local development (ready for Neon Postgres)
+## 🛠 Tech Stack
 
-## What you need before you start
+- **Backend**: Django 5 & Python 3.13
+- **Frontend**: HTML5, Tailwind CSS
+- **Authentication**: Django Allauth
+- **Payments**: Stripe integration architecture for subscription flows
+- **Database**: SQLite for local development (production-ready for Neon Postgres)
+- **Deployment**: Configured for Docker and Railway
 
+---
+
+## 💻 Local Development Setup
+
+### 1. Prerequisites
 - Git
-- Python 3.11 or newer
+- Python 3.11+
 - `pip`
-- Node.js and `npm` if you want to rebuild frontend assets locally
+- Node.js & `npm` (optional, for frontend UI building)
 
-## Clone the project
-
+### 2. Clone the repository
 ```bash
 git clone https://github.com/SAHIL15KP/content-storage.git
 cd content-storage
 ```
 
-## Create a virtual environment
+### 3. Virtual Environment setup
 
-### macOS/Linux
-
+**macOS/Linux:**
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### Windows PowerShell
-
+**Windows PowerShell:**
 ```powershell
 py -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-## Install Python dependencies
-
-I recommend installing both the main and development requirements so you have the same tools I use locally.
-
+### 4. Install Dependencies
 ```bash
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 python -m pip install -r requirements.dev.txt
 ```
+*(The `requirements.dev.txt` installs `rav`, a lightweight task runner used in this project.)*
 
-`requirements.dev.txt` currently installs `rav`, which is a small task runner used in this repo.
-
-## Install frontend dependencies
-
-This step is only needed if you plan to rebuild or watch Tailwind assets. The app can still run locally without it because the repo already includes built static files.
-
+### 5. Install Frontend Dependencies (Optional)
+Required only if you plan to rebuild or watch Tailwind assets.
 ```bash
 npm install
 ```
 
-## Create your local environment file
+### 6. Environment Variables configuration
 
-### macOS/Linux
-
+**macOS/Linux:**
 ```bash
 cp .env.sample .env
 ```
 
-### Windows PowerShell
-
+**Windows PowerShell:**
 ```powershell
 Copy-Item .env.sample .env
 ```
 
-At minimum, make sure these values are set in `.env`:
-
-- `DJANGO_DEBUG=1`
-- `DJANGO_SECRET_KEY="<your-secret-key>"`
-
-Useful notes:
-
-- Leave `DATABASE_URL` empty if you want to use the default local SQLite database.
-- Add the email settings only if you want to test email delivery and account verification flows.
-- Add `STRIPE_SECRET_KEY` only if you want to test billing or checkout features.
-
-## Generate a Django secret key
-
-Run this once, then paste the output into `DJANGO_SECRET_KEY` inside `.env`:
-
+**Generate a Django Secret Key:**
+Run this command and paste the output as `DJANGO_SECRET_KEY` in your `.env` file:
 ```bash
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 
-## Download vendor static files
+Make sure at minimum you have set:
+- `DJANGO_DEBUG=1`
+- `DJANGO_SECRET_KEY="<your-generated-key>"`
 
-The UI uses a few vendor assets that should be pulled once before local development:
+*(Leave `DATABASE_URL` empty to use local SQLite. Only add Stripe/Email variables for testing those flows).*
 
+### 7. Fetch Static Assets
+Vendor assets need to be pulled down once for the UI:
 ```bash
 cd src
 python manage.py vendor_pull
 ```
 
-## Run migrations
-
-Still inside `src`, run:
-
+### 8. Database Migrations
 ```bash
 python manage.py migrate
 ```
 
-If you did not set `DATABASE_URL`, Django will create and use a local SQLite database automatically.
-
-## Create an admin user
-
+### 9. Create an Admin User
 ```bash
 python manage.py createsuperuser
 ```
 
-## Start the development server
-
+### 10. Start the Development Server
 ```bash
 python manage.py runserver
 ```
-
 Open the app at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
-## Optional frontend commands
+---
 
-Run these from the project root, not from `src`.
+## 🎨 Optional Frontend Commands
+Run these from the **project root** (not the `src` directory):
 
-If you installed Node dependencies and want to work on styles locally:
-
+Watch for Tailwind CSS changes:
 ```bash
 npm run watch
 ```
 
-To build the production CSS bundle:
-
+Build the production CSS bundle:
 ```bash
 npm run build
 ```
 
-## Optional `rav` commands
-
-If you like using the task runner, these are the main commands available:
-
+## ⚙️ Optional `rav` Task Runner
+If you enjoy using a task runner, use these handy shortcuts:
 - `rav run install`
 - `rav run install_dev`
 - `rav run migrate`
@@ -172,22 +148,7 @@ If you like using the task runner, these are the main commands available:
 - `rav run vendors_pull`
 - `rav run collectstatic`
 
-Important note for Windows users: the current `rav.yaml` uses `venv/bin/...` paths, so the direct `python manage.py ...` commands in this README are the safest option unless you update those paths for Windows.
+*(Note for Windows users: By default, `rav.yaml` relies on `venv/bin/...` paths. Using the direct Python `manage.py` commands is recommended unless paths are updated.)*
 
-## Local development notes
-
-- You do not need Postgres just to get started locally. SQLite works out of the box.
-- You do not need Stripe credentials unless you are actively testing checkout or subscription flows.
-- You do not need SMTP credentials unless you want to test email sending end to end.
-- This setup guide does not force any cloud storage or upload service. If you want to add your own image or video upload flow later, you can do that on top of the normal local Django setup.
-
-## Troubleshooting
-
-- If `python manage.py vendor_pull` fails, check your internet connection and try again.
-- If signup or email verification is not working, make sure your email settings in `.env` are valid.
-- If billing pages fail, confirm that `STRIPE_SECRET_KEY` is set correctly.
-- If `rav` commands do not work on Windows, use the direct commands from this README instead.
-
-## Docker
-
-If you prefer to run the project with Docker, the repo already includes a `Dockerfile`. You will still need a valid `.env` file before building and running the container.
+## 🐳 Docker Deployment
+A `Dockerfile` is included and ready for deployment. Simply provide a valid `.env` file containing everything needed before building and spinning up the container.
